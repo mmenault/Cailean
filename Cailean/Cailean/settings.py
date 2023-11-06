@@ -39,9 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'frontend',
-    'channels'
+    'django.contrib.staticfiles'
 ]
 
 ASGI_APPLICATION = "whiteboardmanager.routing.application"
