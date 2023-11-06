@@ -102,6 +102,7 @@ class LancerDes(models.Model):
     Session = models.IntegerField(default=1)
     Action = models.CharField(max_length=256,default="")
     Des = models.CharField(max_length=64,default="")
+    Couleur = models.ForeignKey(Couleur, on_delete=models.CASCADE, null=True)
     def __str__(self):
         if self.Perso != None :
             return f"{self.Perso} {self.Action} : {self.Valeur + self.Bonus} ({self.Des})"

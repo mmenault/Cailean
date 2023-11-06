@@ -120,7 +120,7 @@ class FichePerso(TemplateView):
         return render(request, self.template_name,createContext(kwargs["perso_id"],request.user.username,kwargs["version"]))
 
 
-def saveLancer(joueur, resultat, bonus, taille, session, version, perso, action, des):
+def saveLancer(joueur, resultat, bonus, taille, session, version, perso, action, des, couleur):
     lancer = LancerDes()
     lancer.Joueur = joueur
     lancer.Valeur = resultat
@@ -131,6 +131,7 @@ def saveLancer(joueur, resultat, bonus, taille, session, version, perso, action,
     lancer.Perso = perso
     lancer.Action = action
     lancer.Des = des
+    lancer.Couleur = couleur
     lancer.save()
     return None
 
@@ -146,6 +147,14 @@ class lancerDes(TemplateView):
         context["couleur_lancer"] = "success" if context["resultat_brut"] >= 19 else "danger" if context["resultat_brut"] <= 2 else "info"
         action = ""
         des = f"1d{kwargs['taille_des']}+{kwargs['carac_points']}"
+        couleur = None
+
+        if context["resultat_brut"] >= kwargs["taille_des"]-1:
+            couleur = "Success"
+        elif context["resultat_brut"] <= 2:
+            couleur = "Danger"
+        else:
+            couleur = "Info"
 
         if kwargs["carac_id"] != 0 :
             carac = Caracteristique.objects.filter(id=kwargs["carac_id"])[0]
@@ -181,7 +190,8 @@ class lancerDes(TemplateView):
             kwargs["version"],
             Personnage.objects.filter(id=kwargs["perso_id"])[0],
             action,
-            des)
+            des,
+            Couleur.objects.filter(Nom=couleur)[0])
 
         return render(request, self.template_name,context)
 
@@ -196,7 +206,7 @@ class Attaquer(TemplateView):
         context["resultat_brut"] = ""
         context["bonus"] = 0
         context["couleur_lancer"] = "info"
-
+        couleur = "Info"
         arme = Equipement.objects.all().filter(pk=kwargs["equipement_id"])[0]
         stat = arme.Statistique
 
@@ -209,27 +219,39 @@ class Attaquer(TemplateView):
         context["bonus"] = bonus
         context["resultat"] = int(bonus)
         statSplit.pop()
+        valeurMax = 0
+        valeurMin = 0
 
         for lancerDe in statSplit:
             lancer = lancerDe.split("d")
             for i in range(0,int(lancer[0])):
                 rdm = randint(1,int(lancer[1]))
+                valeurMax = valeurMax + int(lancer[1])
+                valeurMin = valeurMin + 1
                 context["resultat"] = context["resultat"] + rdm
                 if context["resultat_brut"] == "":
                     context["resultat_brut"] = str(rdm)
                 else:
                     context["resultat_brut"] = context["resultat_brut"] + "+" + str(rdm)
 
+        if context["resultat"]-int(context["bonus"]) == valeurMax:
+            couleur = "Success"
+            context["couleur_lancer"] = "success"
+        elif context["resultat"]-int(context["bonus"]) == valeurMin:
+            couleur = "Danger"
+            context["couleur_lancer"] = "danger"
+
         saveLancer(
             User.objects.filter(username=request.user.username)[0],
-            context["resultat"],
+            context["resultat"]-int(context["bonus"]),
             context["bonus"],
             -1,
             Session.objects.filter(Version=kwargs["version"])[0].Numero,
             kwargs["version"],
             Personnage.objects.filter(id=kwargs["perso_id"])[0],
             "a attaqué avec "+str(arme),
-            str(stat))
+            str(stat),
+            Couleur.objects.filter(Nom=couleur)[0])
 
         return render(request, self.template_name,context)
 
@@ -709,6 +731,29 @@ class statsDesGet(APIView):
         return Response(data)
 
 
+class SessionView(TemplateView):
+    template_name = 'session.html'
+    
+    def get(self, request, **kwargs):
+
+        session = Session.objects.filter(Version=kwargs["version"])[0]
+        context = createContextHub(request.user.username,request.user.id,kwargs["version"])
+        lancers = LancerDes.objects.filter(Version=kwargs["version"]).filter(Session=session.Numero).order_by("-id")
+
+        context["Resume"] = []
+
+        for lancer in lancers:
+            context["Resume"].append(
+                {
+                    "ligne":str(lancer),
+                    "couleur":str(lancer.Couleur),
+                    "joueur":str(lancer.Joueur.first_name)
+                    }
+                )
+
+        return render(request, self.template_name,context)
+
+
 class LoginView(TemplateView):
 
     template_name = "login.html"
@@ -725,9 +770,8 @@ class LoginView(TemplateView):
 
 class LogoutView(TemplateView):
 
-  template_name = 'login.html'
+    template_name = 'login.html'
 
-  def get(self, request, **kwargs):
-
-    logout(request)
-    return HttpResponseRedirect( settings.LOGIN_URL )
+    def get(self, request, **kwargs):
+        logout(request)
+        return HttpResponseRedirect( settings.LOGIN_URL )

@@ -69,7 +69,6 @@
               <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
               <a class="navbar-item" href="/Irori/Session/{{ version }}">Résumé Session</a>
 
-
               </div>
           
               <div class="navbar-end">
@@ -82,16 +81,18 @@
               </div>
             </div>
         </nav>
+    </div>
 
-        <img style="width:100%;height:50%;object-fit: fill;" src="/media/D4.jpg">
-
-        <audio controls autoplay hidden>
-          <source src="/media/CrisCastor.mp3" type="audio/mpeg">
-        </audio>
-        
-        <audio controls autoplay hidden>
-          <source src="/media/PereCastor.mp3" type="audio/mpeg">
-        </audio>
+    <div class="wrapper">
+        <div class="container card">
+            {% for log in Resume %}
+                {% if log.couleur != "Info" %}
+                    <p class="has-text-{{ log.couleur|lower }} has-text-weight-bold">({{ log.joueur }}) {{ log.ligne }}<br></p>
+                {% else %}
+                    <p>({{ log.joueur }}) {{ log.ligne }}<br></p>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
