@@ -1,0 +1,281 @@
+<!-- Irori/templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head class="has-background-dark">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css" media="screen">
+        body {
+          display: flex;
+          min-height: 100vh;
+          flex-direction: column;
+        }
+   
+        #wrapper {
+          flex: 1;
+        }
+      </style>
+    <!-- Include the Bulma CSS framework for styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>Irori</title>
+</head>
+<body class="has-background-light">
+    <div class="wrapper">
+        <nav class="navbar mb-4" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/Irori/Hub/{{ version }}">Irori</a>
+          
+              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Hub</a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir personnages Joueurs
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in personnagesJoueur %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir PNJ
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in PNJ %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+              <a class="navbar-item" href="/Irori/Village/{{ version }}/{{ village.id }}">{{ village }}</a>
+              <a class="navbar-item" href="/Irori/CreerPerso/{{ version }}">Créer nouveau personnage</a>
+              <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
+
+              </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                    <p>
+                        Joueur : {{ username }}<br>
+                        <a class="button is-warning" href="/Irori/Logout">Se déconnecter</a>
+                    </p>
+                </div>
+              </div>
+            </div>
+        </nav>
+
+        <div class="container box">
+            <form id="formInventaire" action="" method="POST">
+              {% csrf_token %}
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">Joueur</label>
+                    <div class="control select">
+                        <select name="Joueur" id="Joueur" form="formInventaire">
+                          {% for Joueur in Joueurs %}
+                          <option>{{ Joueur.username }}</option>
+                          {% endfor %}
+                          </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Village</label>
+                    <div class="control select">
+                      <select name="Village" id="Village" form="formInventaire">
+                        {% for Village in Villages %}
+                        <option>{{ Village.Nom }}</option>
+                        {% endfor %}
+                        <option>---</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Prenom</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Prenom" id="Prenom" placeholder="Prenom">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Nom</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Nom" id="Nom" placeholder="Nom">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Age</label>
+                    <div class="control">
+                      <input class="input" type="number" name="Age" id="Age" placeholder="Age">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Sexe</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Sexe" id="Sexe" placeholder="Sexe">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Nationalite</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Nationalite" id="Nationalite" placeholder="Nationalite">
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">Personnalite</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Personnalite" id="Personnalite" placeholder="Personnalite">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Profession</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Profession" id="Profession" placeholder="Profession">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Role</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Role" id="Role" placeholder="Role">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Specialite</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Specialite" id="Specialite" placeholder="Specialite">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Aime</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Aime" id="Aime" placeholder="Aime">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Deteste</label>
+                    <div class="control">
+                      <input class="input" type="text" name="Deteste" id="Deteste" placeholder="Deteste">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">PointsMax</label>
+                    <div class="control">
+                      <input class="input" type="number" name="PointsMax" id="PointsMax" placeholder="PointsMax">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="field column">
+                  <label class="label">Force</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Force" id="Force" placeholder="Force">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Constitution</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Constitution" id="Constitution" placeholder="Constitution">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Dexterite</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Dexterite" id="Dexterite" placeholder="Dexterite">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Intelligence</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Intelligence" id="Intelligence" placeholder="Intelligence">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Charisme</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Charisme" id="Charisme" placeholder="Charisme">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Chance</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Chance" id="Chance" placeholder="Chance">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Pouvoir</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Pouvoir" id="Pouvoir" placeholder="Pouvoir">
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="field column">
+                  <label class="label">PV</label>
+                  <div class="control">
+                    <input class="input" type="number" name="PV" id="PV" placeholder="PV">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">PP</label>
+                  <div class="control">
+                    <input class="input" type="number" name="PP" id="PP" placeholder="PP">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Moral</label>
+                  <div class="control">
+                    <input class="input" type="number" name="Moral" id="Moral" placeholder="Moral">
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="field column">
+                  <label class="label">Pouvoir - Nom</label>
+                  <div class="control">
+                    <input class="input" type="text" name="NomPouvoir" id="NomPouvoir" placeholder="NomPouvoir">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Pouvoir - Description</label>
+                  <div class="control">
+                    <input class="input" type="text" name="DescriptionPouvoir" id="DescriptionPouvoir" placeholder="DescriptionPouvoir">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Pouvoir - Niveau</label>
+                  <div class="control">
+                    <input class="input" type="number" name="NiveauPouvoir" id="NiveauPouvoir" placeholder="NiveauPouvoir">
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Pouvoir - Cout</label>
+                  <div class="control">
+                    <input class="input" type="number" name="CoutPouvoir" id="CoutPouvoir" placeholder="CoutPouvoir">
+                  </div>
+                </div>
+              </div>
+              <input type="submit" class="button has-text-white has-background-info-dark" id="Save" value="Save" form="formInventaire" formaction="/Irori/CreerPerso/{{ version }}/Save">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

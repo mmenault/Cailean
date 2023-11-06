@@ -1,0 +1,382 @@
+<!-- Irori/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head class="has-background-dark">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css" media="screen">
+        body {
+          display: flex;
+          min-height: 100vh;
+          flex-direction: column;
+        }
+   
+        #wrapper {
+          flex: 1;
+        }
+      </style>
+    <!-- Include the Bulma CSS framework for styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>Irori</title>
+</head>
+<body class="has-background-light">
+    <div class="wrapper">
+        <nav class="navbar mb-4" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/Irori/Hub/{{ version }}">Irori</a>
+          
+              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Hub</a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir personnages Joueurs
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in personnagesJoueur %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir PNJ
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in PNJ %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+              <a class="navbar-item" href="/Irori/Village/{{ version }}/{{ village.id }}">{{ village }}</a>
+              <a class="navbar-item" href="/Irori/CreerPerso/{{ version }}">Créer nouveau personnage</a>
+              <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
+              </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                    <p>
+                        Joueur : {{ username }}<br>
+                        <a class="button is-warning" href="/Irori/Logout">Se déconnecter</a>
+                    </p>
+                </div>
+              </div>
+            </div>
+        </nav>
+
+        <div class="container box">
+
+          <div class="container card">
+            <header class="card-header">
+                <p class="card-header-title has-background-info-dark has-text-white">
+                    Nombre de lancers par session
+                </p>
+            </header>
+          </div>
+          <table class="table is-fullwidth">
+            <thead>
+                <th class="has-background-info has-text-white">Session</th>
+                <th class="has-background-info has-text-white">Andréa</th>
+                <th class="has-background-info has-text-white">Anthony</th>
+                <th class="has-background-info has-text-white">Antonin</th>
+                <th class="has-background-info has-text-white">Gautier</th>
+                <th class="has-background-info has-text-white">Maxime</th>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for session in LancersParSession %}
+                        <tr>
+                            <td class="has-background-info has-text-white">{{ session.session }}</td>
+                            <td class="has-background-info-light">{{ session.Andrea }}</td>
+                            <td class="has-background-info-light">{{ session.Anthony }}</td>
+                            <td class="has-background-info-light">{{ session.Antonin }}</td>
+                            <td class="has-background-info-light">{{ session.Gautier }}</td>
+                            <td class="has-background-info-light">{{ session.Maxime }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                      <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalLancers.Andrea }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalLancers.Anthony }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalLancers.Antonin }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalLancers.Gautier }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalLancers.Maxime }}</td>
+                  </tr>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="container card">
+          <header class="card-header">
+              <p class="card-header-title has-background-info-dark has-text-white">
+                  Moyenne des lancers par session
+              </p>
+          </header>
+        </div>
+        <table class="table is-fullwidth">
+          <thead>
+              <th class="has-background-info has-text-white">Session</th>
+              <th class="has-background-info has-text-white">Andréa</th>
+              <th class="has-background-info has-text-white">Anthony</th>
+              <th class="has-background-info has-text-white">Antonin</th>
+              <th class="has-background-info has-text-white">Gautier</th>
+              <th class="has-background-info has-text-white">Maxime</th>
+          </thead>
+          <tbody>
+              <tr>
+                  {% for session in MoyennesParSession %}
+                      <tr>
+                          <td class="has-background-info has-text-white">{{ session.session }}</td>
+                          <td class="has-background-info-light">{{ session.Andrea }}</td>
+                          <td class="has-background-info-light">{{ session.Anthony }}</td>
+                          <td class="has-background-info-light">{{ session.Antonin }}</td>
+                          <td class="has-background-info-light">{{ session.Gautier }}</td>
+                          <td class="has-background-info-light">{{ session.Maxime }}</td>
+                      </tr>
+                  {% endfor %}
+                    <tr>
+                      <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalMoyenne.Andrea }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalMoyenne.Anthony }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalMoyenne.Antonin }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalMoyenne.Gautier }}</td>
+                      <td class="has-background-info-light has-text-weight-bold">{{ TotalMoyenne.Maxime }}</td>
+                    </tr>
+              </tr>
+          </tbody>
+      </table>
+
+      <div class="container card">
+        <header class="card-header">
+            <p class="card-header-title has-background-info-dark has-text-white">
+                % de lancers <= 10 par session
+            </p>
+        </header>
+      </div>
+      <table class="table is-fullwidth">
+        <thead>
+            <th class="has-background-info has-text-white">Session</th>
+            <th class="has-background-info has-text-white">Andréa</th>
+            <th class="has-background-info has-text-white">Anthony</th>
+            <th class="has-background-info has-text-white">Antonin</th>
+            <th class="has-background-info has-text-white">Gautier</th>
+            <th class="has-background-info has-text-white">Maxime</th>
+        </thead>
+        <tbody>
+            <tr>
+                {% for session in Moins10ParSession %}
+                    <tr>
+                        <td class="has-background-info has-text-white">{{ session.session }}</td>
+                        <td class="has-background-info-light">{{ session.Andrea }}</td>
+                        <td class="has-background-info-light">{{ session.Anthony }}</td>
+                        <td class="has-background-info-light">{{ session.Antonin }}</td>
+                        <td class="has-background-info-light">{{ session.Gautier }}</td>
+                        <td class="has-background-info-light">{{ session.Maxime }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                  <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+                  <td class="has-background-info-light has-text-weight-bold">{{ TotalMoins10.Andrea }}</td>
+                  <td class="has-background-info-light has-text-weight-bold">{{ TotalMoins10.Anthony }}</td>
+                  <td class="has-background-info-light has-text-weight-bold">{{ TotalMoins10.Antonin }}</td>
+                  <td class="has-background-info-light has-text-weight-bold">{{ TotalMoins10.Gautier }}</td>
+                  <td class="has-background-info-light has-text-weight-bold">{{ TotalMoins10.Maxime }}</td>
+                </tr>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container card">
+      <header class="card-header">
+          <p class="card-header-title has-background-info-dark has-text-white">
+              Nombre d'échec critique par session
+          </p>
+      </header>
+    </div>
+    <table class="table is-fullwidth">
+      <thead>
+          <th class="has-background-info has-text-white">Session</th>
+          <th class="has-background-info has-text-white">Andréa</th>
+          <th class="has-background-info has-text-white">Anthony</th>
+          <th class="has-background-info has-text-white">Antonin</th>
+          <th class="has-background-info has-text-white">Gautier</th>
+          <th class="has-background-info has-text-white">Maxime</th>
+      </thead>
+      <tbody>
+          <tr>
+              {% for session in EchecsParSession %}
+                  <tr>
+                      <td class="has-background-info has-text-white">{{ session.session }}</td>
+                      <td class="has-background-info-light">{{ session.Andrea }}</td>
+                      <td class="has-background-info-light">{{ session.Anthony }}</td>
+                      <td class="has-background-info-light">{{ session.Antonin }}</td>
+                      <td class="has-background-info-light">{{ session.Gautier }}</td>
+                      <td class="has-background-info-light">{{ session.Maxime }}</td>
+                  </tr>
+              {% endfor %}
+              <tr>
+                <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchec.Andrea }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchec.Anthony }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchec.Antonin }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchec.Gautier }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchec.Maxime }}</td>
+              </tr>
+              <tr>
+                <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchecPourcent.Andrea }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchecPourcent.Anthony }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchecPourcent.Antonin }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchecPourcent.Gautier }}</td>
+                <td class="has-background-info-light has-text-weight-bold">{{ TotalEchecPourcent.Maxime }}</td>
+              </tr>
+          </tr>
+      </tbody>
+  </table>
+
+  <div class="container card">
+    <header class="card-header">
+        <p class="card-header-title has-background-info-dark has-text-white">
+            Nombre de réussite critique par session
+        </p>
+    </header>
+  </div>
+  <table class="table is-fullwidth">
+    <thead>
+        <th class="has-background-info has-text-white">Session</th>
+        <th class="has-background-info has-text-white">Andréa</th>
+        <th class="has-background-info has-text-white">Anthony</th>
+        <th class="has-background-info has-text-white">Antonin</th>
+        <th class="has-background-info has-text-white">Gautier</th>
+        <th class="has-background-info has-text-white">Maxime</th>
+    </thead>
+    <tbody>
+        <tr>
+            {% for session in ReussitesParSession %}
+                <tr>
+                    <td class="has-background-info has-text-white">{{ session.session }}</td>
+                    <td class="has-background-info-light">{{ session.Andrea }}</td>
+                    <td class="has-background-info-light">{{ session.Anthony }}</td>
+                    <td class="has-background-info-light">{{ session.Antonin }}</td>
+                    <td class="has-background-info-light">{{ session.Gautier }}</td>
+                    <td class="has-background-info-light">{{ session.Maxime }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+              <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussite.Andrea }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussite.Anthony }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussite.Antonin }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussite.Gautier }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussite.Maxime }}</td>
+            </tr>
+            <tr>
+              <td class="has-background-info has-text-white has-text-weight-bold">Total</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussitePourcent.Andrea }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussitePourcent.Anthony }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussitePourcent.Antonin }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussitePourcent.Gautier }}</td>
+              <td class="has-background-info-light has-text-weight-bold">{{ TotalReussitePourcent.Maxime }}</td>
+            </tr>
+        </tr>
+    </tbody>
+</table>
+
+          <div class="columns">
+            <div class="column">
+              <h1 class="title has-text-centered">Moyenne des lancers</h1>
+              <canvas id="ChartMoyenne"></canvas>
+            </div>
+          </div>
+
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+      var endpoint = '/Irori/StatsDes/Get?version={{ version }}';
+    
+      $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function(data) {
+          drawLineGraph(data, 'ChartMoyenne');
+        },
+        error: function(error_data) {
+          console.log(error_data);
+        }
+      })
+    
+    
+      function drawLineGraph(data, id) {
+        var dataForChart = [];
+        var i = 0;
+        var colors = ['rgb(255,0,0)','rgb(0,255,0)','rgb(0,0,255)','rgb(255,255,0)','rgb(255,0,255)']
+        for(dataLine of data){
+          dataForChart.push({
+            label:dataLine.chartLabel,
+            data:dataLine.chartdata,
+            lineTension:0,
+            fill:false,
+            borderColor: colors[i]
+          })
+          i++;
+        }
+        meanData = {
+          labels:data[0].labels,
+          datasets:dataForChart
+        }
+        var chartOptions = {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              boxWidth: 80,
+              fontColor: 'black'
+            }
+          },
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true,
+                      max:20
+                  }
+              }]
+          }
+        };
+
+        var ctx = document.getElementById(id).getContext('2d');
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'line',
+    
+          // The data for our dataset
+          data: meanData,
+    
+          // Configuration options go here
+          options: chartOptions
+    
+        });
+      }
+    </script>
+
+</body>
+</html>

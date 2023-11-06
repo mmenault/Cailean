@@ -1,0 +1,283 @@
+<!-- Irori/templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head class="has-background-dark">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css" media="screen">
+            body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            }
+    
+            #wrapper {
+            flex: 1;
+            }
+        </style>
+        <!-- Include the Bulma CSS framework for styling -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+        <title>Irori - {{ village }}</title>
+    </head>
+    <body class="has-background-light">
+        <nav class="navbar mb-4" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Irori</a>
+          
+              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Hub</a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                      Voir personnages Joueurs
+                    </a>
+            
+                    <div class="navbar-dropdown">
+                      {% for personnage in personnagesJoueur %}
+                      <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                        {{ personnage }}
+                      </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                      Voir PNJ
+                    </a>
+            
+                    <div class="navbar-dropdown">
+                      {% for personnage in PNJ %}
+                      <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                        {{ personnage }}
+                      </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                <a class="navbar-item" href="/Irori/Village/{{ version }}/{{ village.id }}">{{ village }}</a>
+                <a class="navbar-item" href="/Irori/CreerPerso/{{ version }}">Créer nouveau personnage</a>
+                <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
+
+                </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                    <p>
+                        Joueur : {{ username }}<br>
+                        <a class="button is-warning" href="/Irori/Logout">Se déconnecter</a>
+                    </p>
+                </div>
+              </div>
+            </div>
+        </nav>
+        <div class="wrapper">
+            <div class="container card">
+                <header class="card-header pl-2 pt-2 pb-2">
+                    <p class="title">
+                        {{ village }}
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="container card">
+                                <header class="card-header">
+                                    <p class="card-header-title has-background-link-dark has-text-white">
+                                        Habitants
+                                    </p>
+                                </header>
+                            </div>
+                            <div class="card-content">
+                                <table class="table is-striped is-fullwidth">
+                                    <thead>
+                                        <th class="has-background-link has-text-white">Nom</th>
+                                        <th class="has-background-link has-text-white">Rôle</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for habitant in habitants %}
+                                                <tr>
+                                                    <td><a href="../../Fiche/{{ version }}/{{ habitant.id }}">{{ habitant }}</a></td>
+                                                    <td>{{ habitant.Role }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="container card">
+                                <header class="card-header">
+                                    <p class="card-header-title has-background-success-dark has-text-white">
+                                        Quetes du Village
+                                    </p>
+                                </header>
+                            </div>
+                            <div class="card-content">
+                                <table class="table is-striped is-fullwidth">
+                                    <thead>
+                                        <th class="has-background-success-dark has-text-white">Description</th>
+                                        <th class="has-background-success-dark has-text-white">Statut</th>
+                                        <th class="has-background-success-dark has-text-white">Récompense</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for quete in quetes %}
+                                                <tr>
+                                                    {% if quete.Statut == "FAIT" %}
+                                                    <td class="is-success">{{ quete.Description }}</td>
+                                                    <td class="is-success">{{ quete.Statut }}</td>
+                                                    <td class="is-success">{{ quete.Recompense }}</td>
+                                                    {% else %}
+                                                    <td>{{ quete.Description }}</td>
+                                                    <td>{{ quete.Statut }}</td>
+                                                    <td>{{ quete.Recompense }}</td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container card">
+                                <header class="card-header">
+                                    <p class="card-header-title has-background-primary-dark has-text-white">
+                                        Quetes de Pouvoir
+                                    </p>
+                                </header>
+                            </div>
+                            <div class="card-content">
+                                <table class="table is-striped is-fullwidth">
+                                    <thead>
+                                        <th class="has-background-primary-dark has-text-white">Description</th>
+                                        <th class="has-background-primary-dark has-text-white">Statut</th>
+                                        <th class="has-background-primary-dark has-text-white">Récompense</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {% for quete in quetesPouvoir %}
+                                                <tr>
+                                                    {% if quete.Statut == "FAIT" %}
+                                                    <td class="is-success">{{ quete.Description }}</td>
+                                                    <td class="is-success">{{ quete.Statut }}</td>
+                                                    <td class="is-success">{{ quete.Recompense }}</td>
+                                                    {% else %}
+                                                    <td>{{ quete.Description }}</td>
+                                                    <td>{{ quete.Statut }}</td>
+                                                    <td>{{ quete.Recompense }}</td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container card">
+                        <header class="card-header">
+                            <p class="card-header-title has-background-grey-dark has-text-white">
+                                Inventaire
+                            </p>
+                        </header>
+                    </div>
+                    <div class="card-content">
+                        <form id="formInventaire" action="" method="POST">
+                            {% csrf_token %}
+                        </form>
+                        <table class="table is-striped is-fullwidth">
+                            <thead>
+                                <th class="has-background-grey has-text-white">Nom</th>
+                                <th class="has-background-grey has-text-white">Qualité</th>
+                                <th class="has-background-grey has-text-white">Quantité</th>
+                                <th class="has-background-grey has-text-white">Stat</th>
+                                <th class="has-background-grey has-text-white"> </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {% for objet in inventaire %}
+                                            <tr>
+                                                <td><input class="input" type="text" name="Nom_{{ objet.pk }}" id="Nom_{{ objet.pk }}" form="formInventaire" value="{{ objet.Nom }}"></td>
+                                                <td><div class="select">
+                                                    <select name="Qualite_{{ objet.pk }}" id="Qualite_{{ objet.pk }}" form="formInventaire">
+                                                    {% if objet.Qualite.Nom == "Mediocre" %}
+                                                    <option selected="true">Mediocre</option>
+                                                    {% else %}
+                                                    <option>Mediocre</option>
+                                                    {% endif %}
+                                                    {% if objet.Qualite.Nom == "Normal" %}
+                                                    <option selected="true">Normal</option>
+                                                    {% else %}
+                                                    <option>Normal</option>
+                                                    {% endif %}
+                                                    {% if objet.Qualite.Nom == "Bon" %}
+                                                    <option selected="true">Bon</option>
+                                                    {% else %}
+                                                    <option>Bon</option>
+                                                    {% endif %}
+                                                    {% if objet.Qualite.Nom == "Excellent" %}
+                                                    <option selected="true">Excellent</option>
+                                                    {% else %}
+                                                    <option>Excellent</option>
+                                                    {% endif %}
+                                                    {% if objet.Qualite.Nom == "Chef d'oeuvre" %}
+                                                    <option selected="true">Chef d'oeuvre</option>
+                                                    {% else %}
+                                                    <option>Chef d'oeuvre</option>
+                                                    {% endif %}
+                                                    {% if objet.Qualite.Nom == "Parfait" %}
+                                                    <option selected="true">Parfait</option>
+                                                    {% else %}
+                                                    <option>Parfait</option>
+                                                    {% endif %}
+                                                    </select>
+                                                </div></td>
+                                                <td><input class="input" type="number" name="Quantite_{{ objet.pk }}" id="Quantite_{{ objet.pk }}" form="formInventaire" value="{{ objet.Quantite }}"></td>
+                                                <td><input class="input" type="text" name="Statistique_{{ objet.pk }}" id="Statistique_{{ objet.pk }}" form="formInventaire" value="{{ objet.Statistique }}"></td>
+                                                <td>
+                                                    <div>
+                                                        <input type="submit" class="button is-small has-text-white has-background-info-dark" id="{{ objet.pk }}" value="Save" form="formInventaire" formaction="/Irori/Village/{{ village.id }}/Update/{{ objet.pk }}">
+                                                        <input type="submit" class="button is-small has-text-white has-background-danger-dark" id="{{ objet.pk }}" value="Delete" form="formInventaire" formaction="/Irori/Village/{{ village.id }}/Delete/{{ objet.pk }}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td><input class="input" type="text" name="Nom_NEW" id="Nom_NEW" form="formInventaire" value=""></td>
+                                        <td><div class="select">
+                                            <select name="Qualite_NEW" id="Qualite_NEW" form="formInventaire">
+                                                <option>Mediocre</option>
+                                                <option selected="true">Normal</option>
+                                                <option>Bon</option>
+                                                <option>Excellent</option>
+                                                <option>Chef d'oeuvre</option>
+                                                <option>Parfait</option>
+                                            </select>
+                                        </div></td>
+                                        <td><input class="input" type="number" name="Quantite_NEW" id="Quantite_NEW" form="formInventaire" value="0"></td>
+                                        <td><input class="input" type="text" name="Statistique_NEW" id="Statistique_NEW" form="formInventaire" value=""></td>
+                                        <td>
+                                            <div>
+                                                <input type="submit" class="button is-small has-text-white has-background-info-dark" id="NEW" value="Save New Item" form="formInventaire" formaction="/Irori/Village/{{ village.id }}/Create">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

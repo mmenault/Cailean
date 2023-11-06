@@ -1,0 +1,91 @@
+<!-- Irori/templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head class="has-background-dark">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css" media="screen">
+        body {
+          display: flex;
+          min-height: 100vh;
+          flex-direction: column;
+        }
+   
+        #wrapper {
+          flex: 1;
+        }
+      </style>
+    <!-- Include the Bulma CSS framework for styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>Irori</title>
+</head>
+<body class="has-background-light">
+    <div class="wrapper">
+        <nav class="navbar mb-4" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/Irori/Hub/{{ version }}">Irori</a>
+          
+              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Hub</a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir personnages Joueurs
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in personnagesJoueur %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
+                    Voir PNJ
+                  </a>
+          
+                  <div class="navbar-dropdown">
+                    {% for personnage in PNJ %}
+                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
+                      {{ personnage }}
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+                <a class="navbar-item" href="/Irori/Village/{{ version }}/{{ village.id }}">{{ village }}</a>
+                <a class="navbar-item" href="/Irori/CreerPerso/{{ version }}">Créer nouveau personnage</a>
+                <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
+              </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                    <p>
+                        Joueur : {{ username }}<br>
+                        <a class="button is-warning" href="http://127.0.0.1:8000/Irori/Logout">Se déconnecter</a>
+                    </p>
+                </div>
+              </div>
+            </div>
+        </nav>
+
+        <div class="container box">
+            <h1 class="title has-text-centered">Liste des personnages</h1>
+            {% for personnage in personnages %}
+                <a href="/Irori/Fiche/{{ version }}/{{ personnage.id }}" class="button is-flex m-4 pb-6 pt-6 title has-text-success-dark">{{ personnage }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
