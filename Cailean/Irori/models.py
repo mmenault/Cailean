@@ -69,12 +69,7 @@ class Equipement(models.Model):
     Nom = models.CharField(max_length=64)
     Statistique = models.CharField(max_length=64)
     def __str__(self):
-        if self.Proprietaire != None:
-            return f"{self.Nom} {self.Proprietaire}"
-        elif self.Village != None:
-            return f"{self.Nom} {self.Village}"
-        else:
-            return f"{self.Nom}"
+        return f"{self.Nom}"
 
 class TypeQuete(models.Model):
     Nom = models.CharField(max_length=64)
@@ -99,13 +94,19 @@ class Quete(models.Model):
 
 class LancerDes(models.Model):
     Joueur = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    Perso = models.ForeignKey(Personnage, on_delete=models.CASCADE, blank=True, null=True)
     Version = models.IntegerField(default=4)
     Valeur = models.IntegerField()
     Bonus = models.IntegerField(default=0)
     Taille = models.IntegerField(default=20)
     Session = models.IntegerField(default=1)
+    Action = models.CharField(max_length=256,default="")
+    Des = models.CharField(max_length=64,default="")
     def __str__(self):
-        return f"{self.Joueur} : {self.Valeur}+{self.Bonus}/{self.Taille}"
+        if self.Perso != None :
+            return f"{self.Perso} {self.Action} : {self.Valeur + self.Bonus} ({self.Des})"
+        else: 
+            return f"{self.Joueur} : {self.Valeur}+{self.Bonus}/{self.Taille}"
 
 class Session(models.Model):
     Numero = models.IntegerField(default=1)

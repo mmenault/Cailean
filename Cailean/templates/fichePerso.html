@@ -217,7 +217,7 @@
                                                 <th class="has-background-{{ carac.Couleur|lower }}">Compétence</th>
                                                 <th class="has-background-{{ carac.Couleur|lower }}">Niveau</th>
                                                 <th class="has-background-{{ carac.Couleur|lower }}">
-                                                    <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}">Lancer dés</a>
+                                                    <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}/{{ carac.id }}/0/0">Lancer dés</a>
                                                 </th>
                                                 <th class="has-background-{{ carac.Couleur|lower }}"></th>
                                             </thead>
@@ -229,7 +229,7 @@
                                                             <td class="has-background-{{ carac.Couleur|lower }}-light">{{ competence.Nom }}</td>
                                                             <td class="has-background-{{ carac.Couleur|lower }}-light">{{ carac.Points|add:competence.Bonus }} (+{{ competence.Bonus }})</td>
                                                             <td class="has-background-{{ carac.Couleur|lower }}-light">
-                                                                <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points|add:competence.Bonus }}">Lancer dés</a>
+                                                                <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points|add:competence.Bonus }}/0/{{ competence.id }}/0">Lancer dés</a>
                                                             </td>
                                                             <td class="has-background-{{ carac.Couleur|lower }}-light has-text-white">
                                                                 <a class="button is-small has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Competence/Plus/{{ competence.pk }}">+</a>
@@ -264,7 +264,7 @@
                                                         <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Niveau }}</td>
                                                         <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Cout }}</td>
                                                         <td class="has-background-{{ carac.Couleur|lower }}-light">
-                                                            <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}">Lancer dés</a>
+                                                            <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}/0/0/{{ pouvoir.id }}">Lancer dés</a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -352,15 +352,15 @@
                                 </table>
                             </div>
 
-                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/0">Lancer D20</a>
+                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/0/0/0/0">Lancer D20</a>
                             <br>
-                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/10/0">Lancer D10</a>
+                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/10/0/0/0/0">Lancer D10</a>
                             <br>
-                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/8/0">Lancer D8</a>
+                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/8/0/0/0/0">Lancer D8</a>
                             <br>
-                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/6/0">Lancer D6</a>
+                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/6/0/0/0/0">Lancer D6</a>
                             <br>
-                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/4/0">Lancer D4</a>
+                            <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/4/0/0/0/0">Lancer D4</a>
                             <br>
                         </div>
                     </div>

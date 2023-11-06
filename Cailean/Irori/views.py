@@ -30,29 +30,6 @@ def createContextHub(username,id,version):
             "version":version
             }
 
-class AdminFunction(TemplateView):
-
-    template_name = 'base.html'
-
-    def get(self, request, **kwargs):
-
-        valeurs = []
-        session = 0
-        joueur = ""
-        version = kwargs["version"]
-
-        for i in range(0,len(valeurs)):
-            lancer = LancerDes()
-            lancer.Valeur = valeurs[i]
-            lancer.Bonus = 0
-            lancer.Taille = 20
-            lancer.Session = session
-            lancer.Joueur = User.objects.filter(username=joueur)[0]
-            lancer.Version = version
-            lancer.save()
-
-        return render(request, self.template_name,createContextHub(request.user.username,request.user.id,kwargs["version"]))
-
 class Hub(TemplateView):
 
     template_name = 'base.html'
@@ -142,6 +119,21 @@ class FichePerso(TemplateView):
     def get(self, request, **kwargs):
         return render(request, self.template_name,createContext(kwargs["perso_id"],request.user.username,kwargs["version"]))
 
+
+def saveLancer(joueur, resultat, bonus, taille, session, version, perso, action, des):
+    lancer = LancerDes()
+    lancer.Joueur = joueur
+    lancer.Valeur = resultat
+    lancer.Bonus = bonus
+    lancer.Taille = taille
+    lancer.Session = session
+    lancer.Version = version
+    lancer.Perso = perso
+    lancer.Action = action
+    lancer.Des = des
+    lancer.save()
+    return None
+
 class lancerDes(TemplateView):
     
     template_name = 'fichePerso.html'
@@ -152,15 +144,45 @@ class lancerDes(TemplateView):
         context["resultat_brut"] = context["resultat"] - kwargs["carac_points"]
         context["bonus"] = kwargs["carac_points"]
         context["couleur_lancer"] = "success" if context["resultat_brut"] >= 19 else "danger" if context["resultat_brut"] <= 2 else "info"
-        joueur = User.objects.filter(username=request.user.username)[0]
-        lancer = LancerDes()
-        lancer.Joueur = joueur
-        lancer.Valeur = context["resultat_brut"]
-        lancer.Bonus = kwargs["carac_points"]
-        lancer.Taille = kwargs["taille_des"]
-        lancer.Session = Session.objects.filter(Version=kwargs["version"])[0].Numero
-        lancer.Version = kwargs["version"]
-        lancer.save()
+        action = ""
+        des = f"1d{kwargs['taille_des']}+{kwargs['carac_points']}"
+
+        if kwargs["carac_id"] != 0 :
+            carac = Caracteristique.objects.filter(id=kwargs["carac_id"])[0]
+            if carac.Nom == "Force":
+                action = "s'est servi de sa force"
+            elif carac.Nom == "Constitution":
+                action = "s'est servi de sa constitution"
+            elif carac.Nom == "Dexterite":
+                action = "s'est servi de sa dextérité"
+            elif carac.Nom == "Intelligence":
+                action = "s'est servi de son intelligence"
+            elif carac.Nom == "Charisme":
+                action = "s'est servi de son charisme"
+            elif carac.Nom == "Chance":
+                action = "s'est servi de sa chance"
+            else:
+                action = f"s'est servi de {carac.Nom}"
+        elif kwargs["comp_id"] != 0 :
+            comp = Competence.objects.filter(id=kwargs["comp_id"])[0]
+            action = f"s'est servi de sa compétence {comp.Nom}"
+        elif kwargs["pouvoir_id"] != 0 :
+            pouvoir = Pouvoir.objects.filter(id=kwargs["pouvoir_id"])[0]
+            action = f"s'est servi de son pouvoir {pouvoir.Nom}"
+        else :
+            action = "a obtenu "
+        
+        saveLancer(
+            User.objects.filter(username=request.user.username)[0],
+            context["resultat_brut"],
+            kwargs["carac_points"],
+            kwargs["taille_des"],
+            Session.objects.filter(Version=kwargs["version"])[0].Numero,
+            kwargs["version"],
+            Personnage.objects.filter(id=kwargs["perso_id"])[0],
+            action,
+            des)
+
         return render(request, self.template_name,context)
 
 class Attaquer(TemplateView):
@@ -197,6 +219,17 @@ class Attaquer(TemplateView):
                     context["resultat_brut"] = str(rdm)
                 else:
                     context["resultat_brut"] = context["resultat_brut"] + "+" + str(rdm)
+
+        saveLancer(
+            User.objects.filter(username=request.user.username)[0],
+            context["resultat"],
+            context["bonus"],
+            -1,
+            Session.objects.filter(Version=kwargs["version"])[0].Numero,
+            kwargs["version"],
+            Personnage.objects.filter(id=kwargs["perso_id"])[0],
+            "a attaqué avec "+str(arme),
+            str(stat))
 
         return render(request, self.template_name,context)
 
@@ -495,27 +528,27 @@ class statsDes(TemplateView):
         for i in range(1,sessionCourante.Numero+1):
             lancers = LancerDes.objects.filter(Session=i).filter(Taille=20).filter(Version=kwargs["version"])
 
-            lancersAndrea = lancers.filter(Joueur=joueurs.filter(username="CORDEROCKET")[0])
+            lancersAndrea = lancers.filter(Joueur=joueurs.filter(username="CORDEROCKET")[0]).filter(Taille=20)
             lancersAndreaMoins10 = lancersAndrea.filter(Valeur__lte=10)
             lancersAndreaEchec = lancersAndrea.filter(Valeur__lte=2)
             lancersAndreaReussite = lancersAndrea.filter(Valeur__gte=19)
 
-            lancersAnthony = lancers.filter(Joueur=joueurs.filter(username="PeteurDeLattes")[0])
+            lancersAnthony = lancers.filter(Joueur=joueurs.filter(username="PeteurDeLattes")[0]).filter(Taille=20)
             lancersAnthonyMoins10 = lancersAnthony.filter(Valeur__lte=10)
             lancersAnthonyEchec = lancersAnthony.filter(Valeur__lte=2)
             lancersAnthonyReussite = lancersAnthony.filter(Valeur__gte=19)
 
-            lancersAntonin = lancers.filter(Joueur=joueurs.filter(username="Warns")[0])
+            lancersAntonin = lancers.filter(Joueur=joueurs.filter(username="Warns")[0]).filter(Taille=20)
             lancersAntoninMoins10 = lancersAntonin.filter(Valeur__lte=10)
             lancersAntoninEchec = lancersAntonin.filter(Valeur__lte=2)
             lancersAntoninReussite = lancersAntonin.filter(Valeur__gte=19)
 
-            lancersGautier = lancers.filter(Joueur=joueurs.filter(username="Rouguail")[0])
+            lancersGautier = lancers.filter(Joueur=joueurs.filter(username="Rouguail")[0]).filter(Taille=20)
             lancersGautierMoins10 = lancersGautier.filter(Valeur__lte=10)
             lancersGautierEchec = lancersGautier.filter(Valeur__lte=2)
             lancersGautierReussite = lancersGautier.filter(Valeur__gte=19)
 
-            lancersMaxime = lancers.filter(Joueur=joueurs.filter(username="admmmenault")[0])
+            lancersMaxime = lancers.filter(Joueur=joueurs.filter(username="admmmenault")[0]).filter(Taille=20)
             lancersMaximeMoins10 = lancersMaxime.filter(Valeur__lte=10)
             lancersMaximeEchec = lancersMaxime.filter(Valeur__lte=2)
             lancersMaximeReussite = lancersMaxime.filter(Valeur__gte=19)
@@ -561,27 +594,27 @@ class statsDes(TemplateView):
                 "Maxime":len(lancersMaximeReussite) if len(lancersMaximeReussite) > 0 else '-'
             })
 
-        lancersAndrea = LancerDes.objects.filter(Joueur=joueurs.filter(username="CORDEROCKET")[0]).filter(Version=kwargs["version"])
+        lancersAndrea = LancerDes.objects.filter(Joueur=joueurs.filter(username="CORDEROCKET")[0]).filter(Version=kwargs["version"]).filter(Taille=20)
         lancersAndreaMoins10 = lancersAndrea.filter(Valeur__lte=10)
         lancersAndreaEchec = lancersAndrea.filter(Valeur__lte=2)
         lancersAndreaReussite = lancersAndrea.filter(Valeur__gte=19)
 
-        lancersAnthony = LancerDes.objects.filter(Joueur=joueurs.filter(username="PeteurDeLattes")[0]).filter(Version=kwargs["version"])
+        lancersAnthony = LancerDes.objects.filter(Joueur=joueurs.filter(username="PeteurDeLattes")[0]).filter(Version=kwargs["version"]).filter(Taille=20)
         lancersAnthonyMoins10 = lancersAnthony.filter(Valeur__lte=10)
         lancersAnthonyEchec = lancersAnthony.filter(Valeur__lte=2)
         lancersAnthonyReussite = lancersAnthony.filter(Valeur__gte=19)
 
-        lancersAntonin = LancerDes.objects.filter(Joueur=joueurs.filter(username="Warns")[0]).filter(Version=kwargs["version"])
+        lancersAntonin = LancerDes.objects.filter(Joueur=joueurs.filter(username="Warns")[0]).filter(Version=kwargs["version"]).filter(Taille=20)
         lancersAntoninMoins10 = lancersAntonin.filter(Valeur__lte=10)
         lancersAntoninEchec = lancersAntonin.filter(Valeur__lte=2)
         lancersAntoninReussite = lancersAntonin.filter(Valeur__gte=19)
 
-        lancersGautier = LancerDes.objects.filter(Joueur=joueurs.filter(username="Rouguail")[0]).filter(Version=kwargs["version"])
+        lancersGautier = LancerDes.objects.filter(Joueur=joueurs.filter(username="Rouguail")[0]).filter(Version=kwargs["version"]).filter(Taille=20)
         lancersGautierMoins10 = lancersGautier.filter(Valeur__lte=10)
         lancersGautierEchec = lancersGautier.filter(Valeur__lte=2)
         lancersGautierReussite = lancersGautier.filter(Valeur__gte=19)
 
-        lancersMaxime = LancerDes.objects.filter(Joueur=joueurs.filter(username="admmmenault")[0]).filter(Version=kwargs["version"])
+        lancersMaxime = LancerDes.objects.filter(Joueur=joueurs.filter(username="admmmenault")[0]).filter(Version=kwargs["version"]).filter(Taille=20)
         lancersMaximeMoins10 = lancersMaxime.filter(Valeur__lte=10)
         lancersMaximeEchec = lancersMaxime.filter(Valeur__lte=2)
         lancersMaximeReussite = lancersMaxime.filter(Valeur__gte=19)
