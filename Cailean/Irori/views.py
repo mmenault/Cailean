@@ -715,7 +715,7 @@ class statsDesGet(APIView):
 
                 for i in range(1,(sessionMax+1)):
                     labels.append(f"Session {i}")
-                    lancersSession = lancers.filter(Session=i).filter(Version=request.query_params.get("version"))
+                    lancersSession = lancers.filter(Session=i).filter(Version=request.query_params.get("version")).filter(Taille=20)
 
                     if len(lancersSession) > 0:
                         chartdata.append(mean(lancerSession.Valeur for lancerSession in lancersSession))
