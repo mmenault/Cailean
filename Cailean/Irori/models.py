@@ -32,7 +32,6 @@ class Personnage(models.Model):
     Specialite = models.CharField(max_length=64)
     Aime = models.CharField(max_length=64)
     Deteste = models.CharField(max_length=64)
-    PointsMax = models.IntegerField()
     def __str__(self):
         return f"{self.Prenom} {self.Nom}"
 

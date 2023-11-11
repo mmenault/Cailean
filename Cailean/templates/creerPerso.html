@@ -86,195 +86,234 @@
         <div class="container box">
             <form id="formInventaire" action="" method="POST">
               {% csrf_token %}
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label class="label">Joueur</label>
-                    <div class="control select">
-                        <select name="Joueur" id="Joueur" form="formInventaire">
-                          {% for Joueur in Joueurs %}
-                          <option>{{ Joueur.username }}</option>
-                          {% endfor %}
-                          </select>
-                    </div>
+
+              <div class="tile is-ancestor">
+
+                <div class="tile is-vertical">
+
+                  {% if username == "admmmenault" %}
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">ADMIN</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Joueur</label>
+                          <div class="control select">
+                              <select name="Joueur" id="Joueur" form="formInventaire">
+                                {% for Joueur in Joueurs %}
+                                <option>{{ Joueur.username }}</option>
+                                {% endfor %}
+                                </select>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Village</label>
+                          <div class="control select">
+                            <select name="Village" id="Village" form="formInventaire">
+                              {% for Village in Villages %}
+                              <option>{{ Village.Nom }}</option>
+                              {% endfor %}
+                              <option>---</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Village</label>
-                    <div class="control select">
-                      <select name="Village" id="Village" form="formInventaire">
-                        {% for Village in Villages %}
-                        <option>{{ Village.Nom }}</option>
-                        {% endfor %}
-                        <option>---</option>
-                      </select>
-                    </div>
+                  {% else %}
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">Infos</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Joueur</label>
+                          <div class="control select">
+                              <select name="Joueur" id="Joueur" form="formInventaire">
+                                <option>{{ username }}</option>
+                                </select>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Village</label>
+                          <div class="control select">
+                            <select name="Village" id="Village" form="formInventaire">
+                              <option>{{ village }}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Prenom</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Prenom" id="Prenom" placeholder="Prenom">
-                    </div>
+                  {% endif %}
+
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">Infos</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Prenom</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Prenom" id="Prenom" placeholder="Prenom">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Nom</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Nom" id="Nom" placeholder="Nom">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Age</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Age" id="Age" placeholder="Age">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Sexe</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Sexe" id="Sexe" placeholder="Sexe">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Nationalite</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Nationalite" id="Nationalite" placeholder="Nationalite">
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Nom</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Nom" id="Nom" placeholder="Nom">
-                    </div>
+
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">Personnalité</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Personnalite</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Personnalite" id="Personnalite" placeholder="Personnalite">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Profession</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Profession" id="Profession" placeholder="Profession">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Role</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Role" id="Role" placeholder="Role">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Specialite</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Specialite" id="Specialite" placeholder="Specialite">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Aime</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Aime" id="Aime" placeholder="Aime">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Deteste</label>
+                          <div class="control">
+                            <input class="input" type="text" name="Deteste" id="Deteste" placeholder="Deteste">
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Age</label>
-                    <div class="control">
-                      <input class="input" type="number" name="Age" id="Age" placeholder="Age">
-                    </div>
+
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">Pouvoir</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Nom</label>
+                          <div class="control">
+                            <input class="input" type="text" name="NomPouvoir" id="NomPouvoir" placeholder="NomPouvoir">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Description</label>
+                          <div class="control">
+                            <input class="input" type="text" name="DescriptionPouvoir" id="DescriptionPouvoir" placeholder="DescriptionPouvoir">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Niveau</label>
+                          <div class="control">
+                            <input class="input" type="number" name="NiveauPouvoir" id="NiveauPouvoir" placeholder="NiveauPouvoir" value="1">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Cout</label>
+                          <div class="control">
+                            <input class="input" type="number" name="CoutPouvoir" id="CoutPouvoir" placeholder="CoutPouvoir" value="1">
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Sexe</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Sexe" id="Sexe" placeholder="Sexe">
-                    </div>
+
+                  <div class="tile is-parent">
+                    <article class="tile is-child notification is-info">
+                      <p class="title">Stats - 35 points à répartir</p>
+                      <div class="tile">
+                        <div class="field">
+                          <label class="label has-text-white">Force</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Force" id="Force" placeholder="Force" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Constitution</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Constitution" id="Constitution" placeholder="Constitution" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Dexterite</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Dexterite" id="Dexterite" placeholder="Dexterite" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Intelligence</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Intelligence" id="Intelligence" placeholder="Intelligence" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Charisme</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Charisme" id="Charisme" placeholder="Charisme" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Chance</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Chance" id="Chance" placeholder="Chance" value="5">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label has-text-white">Pouvoir</label>
+                          <div class="control">
+                            <input class="input" type="number" name="Pouvoir" id="Pouvoir" placeholder="Pouvoir" value="5">
+                          </div>
+                        </div>
+                      </div>
+                    </article>
                   </div>
-                  <div class="field">
-                    <label class="label">Nationalite</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Nationalite" id="Nationalite" placeholder="Nationalite">
-                    </div>
-                  </div>
+
                 </div>
-                <div class="column">
-                  <div class="field">
-                    <label class="label">Personnalite</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Personnalite" id="Personnalite" placeholder="Personnalite">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Profession</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Profession" id="Profession" placeholder="Profession">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Role</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Role" id="Role" placeholder="Role">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Specialite</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Specialite" id="Specialite" placeholder="Specialite">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Aime</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Aime" id="Aime" placeholder="Aime">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Deteste</label>
-                    <div class="control">
-                      <input class="input" type="text" name="Deteste" id="Deteste" placeholder="Deteste">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">PointsMax</label>
-                    <div class="control">
-                      <input class="input" type="number" name="PointsMax" id="PointsMax" placeholder="PointsMax">
-                    </div>
-                  </div>
-                </div>
+
               </div>
-              <div class="columns">
-                <div class="field column">
-                  <label class="label">Force</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Force" id="Force" placeholder="Force">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Constitution</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Constitution" id="Constitution" placeholder="Constitution">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Dexterite</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Dexterite" id="Dexterite" placeholder="Dexterite">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Intelligence</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Intelligence" id="Intelligence" placeholder="Intelligence">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Charisme</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Charisme" id="Charisme" placeholder="Charisme">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Chance</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Chance" id="Chance" placeholder="Chance">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Pouvoir</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Pouvoir" id="Pouvoir" placeholder="Pouvoir">
-                  </div>
-                </div>
-              </div>
-              <div class="columns">
-                <div class="field column">
-                  <label class="label">PV</label>
-                  <div class="control">
-                    <input class="input" type="number" name="PV" id="PV" placeholder="PV">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">PP</label>
-                  <div class="control">
-                    <input class="input" type="number" name="PP" id="PP" placeholder="PP">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Moral</label>
-                  <div class="control">
-                    <input class="input" type="number" name="Moral" id="Moral" placeholder="Moral">
-                  </div>
-                </div>
-              </div>
-              <div class="columns">
-                <div class="field column">
-                  <label class="label">Pouvoir - Nom</label>
-                  <div class="control">
-                    <input class="input" type="text" name="NomPouvoir" id="NomPouvoir" placeholder="NomPouvoir">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Pouvoir - Description</label>
-                  <div class="control">
-                    <input class="input" type="text" name="DescriptionPouvoir" id="DescriptionPouvoir" placeholder="DescriptionPouvoir">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Pouvoir - Niveau</label>
-                  <div class="control">
-                    <input class="input" type="number" name="NiveauPouvoir" id="NiveauPouvoir" placeholder="NiveauPouvoir">
-                  </div>
-                </div>
-                <div class="field column">
-                  <label class="label">Pouvoir - Cout</label>
-                  <div class="control">
-                    <input class="input" type="number" name="CoutPouvoir" id="CoutPouvoir" placeholder="CoutPouvoir">
-                  </div>
-                </div>
-              </div>
+
               <input type="submit" class="button has-text-white has-background-info-dark" id="Save" value="Save" form="formInventaire" formaction="/Irori/CreerPerso/{{ version }}/Save">
             </form>
         </div>
