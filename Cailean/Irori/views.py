@@ -428,7 +428,6 @@ class creerPersoSave(TemplateView):
         nouveauPerso.Specialite = request.POST["Specialite"]
         nouveauPerso.Aime = request.POST["Aime"]
         nouveauPerso.Deteste = request.POST["Deteste"]
-        nouveauPerso.PointsMax = request.POST["PointsMax"]
         nouveauPerso.save()
 
         # Force
@@ -498,8 +497,8 @@ class creerPersoSave(TemplateView):
         pv = Caracteristique()
         pv.Proprietaire = nouveauPerso
         pv.Nom = "PV"
-        pv.Points = request.POST["PV"]
-        pv.PointsMax = request.POST["PV"]
+        pv.Points = 2*constitution.Points+force.Points
+        pv.PointsMax = pv.Points
         pv.Couleur = Couleur.objects.filter(Nom="Success-dark")[0]
         pv.save()
 
@@ -507,8 +506,8 @@ class creerPersoSave(TemplateView):
         pp = Caracteristique()
         pp.Proprietaire = nouveauPerso
         pp.Nom = "PP"
-        pp.Points = request.POST["PP"]
-        pp.PointsMax = request.POST["PP"]
+        pp.Points = pouvoir.Points
+        pp.PointsMax = pouvoir.Points
         pp.Couleur = Couleur.objects.filter(Nom="Link-dark")[0]
         pp.save()
 
@@ -516,8 +515,8 @@ class creerPersoSave(TemplateView):
         moral = Caracteristique()
         moral.Proprietaire = nouveauPerso
         moral.Nom = "Moral"
-        moral.Points = request.POST["Moral"]
-        moral.PointsMax = request.POST["Moral"]
+        moral.Points = 5
+        moral.PointsMax = 5
         moral.Couleur = Couleur.objects.filter(Nom="Primary-dark")[0]
         moral.save()
 
