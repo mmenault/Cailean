@@ -117,7 +117,9 @@ class FichePerso(TemplateView):
     template_name = 'fichePerso.html'
 
     def get(self, request, **kwargs):
-        return render(request, self.template_name,createContext(kwargs["perso_id"],request.user.username,kwargs["version"]))
+        context = createContext(kwargs["perso_id"],request.user.username,kwargs["version"])
+        context["Onglet"] = kwargs["onglet"]
+        return render(request, self.template_name,context)
 
 
 def saveLancer(joueur, resultat, bonus, taille, session, version, perso, action, des, couleur):

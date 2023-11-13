@@ -1,0 +1,78 @@
+
+<div class="container card">
+    <div class="card-content">
+        <div class="columns">
+            <div class="column">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <th>Sexe</th>
+                        <th>Age</th>
+                        <th>Nationalité</th>
+                        <th>Personnalité</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ personnage.Sexe }}</td>
+                            <td>{{ personnage.Age }} ans</td>
+                            <td>{{ personnage.Nationalite }}</td>
+                            <td>{{ personnage.Personnalite }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="column">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <th>Profession</th>
+                        <th>Spécialité</th>
+                        <th class="has-text-success">Aime</th>
+                        <th class="has-text-danger">Déteste</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ personnage.Profession }}</td>
+                            <td>{{ personnage.Specialite }}</td>
+                            <td class="has-text-success">{{ personnage.Aime }}</td>
+                            <td class="has-text-danger">{{ personnage.Deteste }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="container card">
+            <header class="card-header">
+                <p class="card-header-title has-background-success-dark has-text-white">
+                    Quetes
+                </p>
+            </header>
+        </div>
+        <div class="card-content">
+            <table class="table is-striped is-fullwidth">
+                <thead>
+                    <th class="has-background-success-dark has-text-white">Description</th>
+                    <th class="has-background-success-dark has-text-white">Statut</th>
+                    <th class="has-background-success-dark has-text-white">Récompense</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for quete in quetes %}
+                            <tr>
+                                {% if quete.Statut == "FAIT" %}
+                                <td class="is-success">{{ quete.Description }}</td>
+                                <td class="is-success">{{ quete.Statut }}</td>
+                                <td class="is-success">{{ quete.Recompense }}</td>
+                                {% else %}
+                                <td>{{ quete.Description }}</td>
+                                <td>{{ quete.Statut }}</td>
+                                <td>{{ quete.Recompense }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
