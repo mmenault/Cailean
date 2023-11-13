@@ -1,0 +1,158 @@
+<div class="container card">
+    <div class="card-content">
+        <div class="columns">
+            {% for carac in caracs %}
+                {% if carac.Nom == "PV" or carac.Nom == "PP" or carac.Nom == "Moral" %}
+                    <div class="column">
+                        <table class="table is-fullwidth has-background-{{ carac.Couleur|lower }}">
+                            <thead>
+                                <th class="has-text-white">Stat</th>
+                                <th class="has-text-white">Actuelle</th>
+                                <th class="has-text-white">Max</th>
+                                <th class="has-text-white"></th>                                            
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="has-text-white">{{ carac.Nom }}</td>
+                                    <td class="has-text-white">{{ carac.Points }}</td>
+                                    <td class="has-text-white">{{ carac.PointsMax }}</td>
+                                    <td class="has-text-white">
+                                        <a class="button is-small has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Carac/Plus/{{ carac.pk }}">+</a>
+                                        <a class="button is-small has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Carac/Moins/{{ carac.pk }}">-</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="columns">
+            <div class="column">
+                {% for carac in caracs %}
+                    {% if carac.Nom != "PV" and carac.Nom != "PP" and carac.Nom != "Moral" and carac.Nom != "Pouvoir" %}
+                        <div class="container card">
+                            <header class="card-header has-background-{{ carac.Couleur|lower }}">
+                                <p class="card-header-title">
+                                    {{ carac.Nom }} - {{ carac.Points }}
+                                </p>
+                            </header>
+                        </div>
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <th class="has-background-{{ carac.Couleur|lower }}">Compétence</th>
+                                    <th class="has-background-{{ carac.Couleur|lower }}">Niveau</th>
+                                    <th class="has-background-{{ carac.Couleur|lower }}">
+                                        <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}/{{ carac.id }}/0/0">Lancer dés</a>
+                                    </th>
+                                    <th class="has-background-{{ carac.Couleur|lower }}"></th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {% for competence in competences %}
+                                            {% if competence.Categorie == carac %}
+                                            <tr>
+                                                <td class="has-background-{{ carac.Couleur|lower }}-light">{{ competence.Nom }}</td>
+                                                <td class="has-background-{{ carac.Couleur|lower }}-light">{{ carac.Points|add:competence.Bonus }} (+{{ competence.Bonus }})</td>
+                                                <td class="has-background-{{ carac.Couleur|lower }}-light">
+                                                    <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points|add:competence.Bonus }}/0/{{ competence.id }}/0">Lancer dés</a>
+                                                </td>
+                                                <td class="has-background-{{ carac.Couleur|lower }}-light has-text-white">
+                                                    <a class="button is-small has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Competence/Plus/{{ competence.pk }}">+</a>
+                                                    <a class="button is-small has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Competence/Moins/{{ competence.pk }}">-</a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="column">
+                {% for carac in caracs %}
+                    {% if carac.Nom == "Pouvoir" %}
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <th class="has-background-{{ carac.Couleur|lower }}">{{ carac.Nom }} - {{ carac.Points }}</th>
+                                <th class="has-background-{{ carac.Couleur|lower }}">Description</th>
+                                <th class="has-background-{{ carac.Couleur|lower }}">Niveau</th>
+                                <th class="has-background-{{ carac.Couleur|lower }}">Cout</th>
+                                <th class="has-background-{{ carac.Couleur|lower }}">Lancer dés</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {% for pouvoir in pouvoirs %}
+                                        <tr>
+                                            <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Nom }}</td>
+                                            <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Description }}</td>
+                                            <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Niveau }}</td>
+                                            <td class="has-background-{{ carac.Couleur|lower }}-light">{{ pouvoir.Cout }}</td>
+                                            <td class="has-background-{{ carac.Couleur|lower }}-light">
+                                                <a class="button has-text-white has-background-{{ carac.Couleur|lower }}" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/{{ carac.Points }}/0/0/{{ pouvoir.id }}">Lancer dés</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endfor %}
+        
+                <div class="container card">
+                    <header class="card-header">
+                        <p class="card-header-title has-background-grey has-text-white">
+                            NOUVELLE COMPETENCE
+                        </p>
+                    </header>
+                </div>
+                <div class="card-content">
+                    <form id="formComp" action="" method="POST">
+                        {% csrf_token %}
+                    </form>
+                    <table class="table is-striped is-fullwidth">
+                        <thead>
+                            <th class="has-background-grey has-text-white">Description</th>
+                            <th class="has-background-grey has-text-white">Statut</th>
+                            <th class="has-background-grey has-text-white">Bonus</th>
+                            <th class="has-background-grey has-text-white"></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input class="input" type="text" name="Nom_NEW" id="Nom_NEW" form="formComp" value=""></td>
+                                <td><div class="select">
+                                    <select name="Categorie_NEW" id="Categorie_NEW" form="formComp">
+                                      <option selected="true">Force</option>
+                                      <option>Constitution</option>
+                                      <option>Dexterite</option>
+                                      <option>Intelligence</option>
+                                      <option>Charisme</option>
+                                      <option>Chance</option>
+                                    </select>
+                                </div></td>
+                                <td><input class="input" type="number" name="Bonus_NEW" id="Bonus_NEW" form="formComp" value="1"></td>
+                                <td>
+                                    <div>
+                                        <input type="submit" class="button is-small has-text-white has-background-info-dark" id="NEW" value="Save New Item" form="formComp" formaction="/Irori/Fiche/{{ version }}/{{ personnage.id }}/NouvelleCompetence">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/20/0/0/0/0">Lancer D20</a>
+                <br>
+                <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/10/0/0/0/0">Lancer D10</a>
+                <br>
+                <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/8/0/0/0/0">Lancer D8</a>
+                <br>
+                <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/6/0/0/0/0">Lancer D6</a>
+                <br>
+                <a class="button has-text-white has-background-grey is-fullwidth" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}/Lancer/4/0/0/0/0">Lancer D4</a>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

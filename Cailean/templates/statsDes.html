@@ -26,62 +26,7 @@
 </head>
 <body class="has-background-light">
     <div class="wrapper">
-        <nav class="navbar mb-4" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-              <a class="navbar-item" href="/Irori/Hub/{{ version }}">Irori</a>
-          
-              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-              </a>
-            </div>
-          
-            <div id="navbarBasicExample" class="navbar-menu">
-              <div class="navbar-start">
-                <a class="navbar-item" href="/Irori/Hub/{{ version }}">Hub</a>
-                <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
-                    Voir personnages Joueurs
-                  </a>
-          
-                  <div class="navbar-dropdown">
-                    {% for personnage in personnagesJoueur %}
-                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
-                      {{ personnage }}
-                    </a>
-                    {% endfor %}
-                  </div>
-                </div>
-                <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link" href="/Irori/Fiches/{{ version }}">
-                    Voir PNJ
-                  </a>
-          
-                  <div class="navbar-dropdown">
-                    {% for personnage in PNJ %}
-                    <a class="navbar-item" href="/Irori/Fiche/{{ version }}/{{ personnage.id }}">
-                      {{ personnage }}
-                    </a>
-                    {% endfor %}
-                  </div>
-                </div>
-              <a class="navbar-item" href="/Irori/Village/{{ version }}/{{ village.id }}">{{ village }}</a>
-              <a class="navbar-item" href="/Irori/CreerPerso/{{ version }}">Créer nouveau personnage</a>
-              <a class="navbar-item" href="/Irori/StatsDes/{{ version }}">Statistiques lancers de dés</a>
-              <a class="navbar-item" href="/Irori/Session/{{ version }}">Résumé Session</a>
-
-              </div>
-          
-              <div class="navbar-end">
-                <div class="navbar-item">
-                    <p>
-                        Joueur : {{ username }}<br>
-                        <a class="button is-warning" href="/Irori/Logout">Se déconnecter</a>
-                    </p>
-                </div>
-              </div>
-            </div>
-        </nav>
+      {% include "components/base_header.html" %}
 
         <div class="container box">
 
