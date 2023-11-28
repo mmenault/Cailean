@@ -2,12 +2,9 @@
 
 ## TODO List
 - Clean python code
-- Clean HTML templates
-- Reduce size of D4.jpg in Hub
-- Toggle between V3 / V4 (header)
-- Rework character creation form
-- Rework character sheet
-- Session summary ?
+- Clean HTML templates (75% done)
+- Rework character creation form (75% done)
+- Rework character sheet (75% done)
 - Clean URLs ?
 - Sharing space ?
 - Map ?

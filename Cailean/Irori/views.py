@@ -20,7 +20,10 @@ def createContextHub(username,id,version):
     persosJoueur = Personnage.objects.filter(Joueur=id)
     admUser = User.objects.filter(username="admmmenault")[0]
     personnagesJoueurs = Personnage.objects.all().exclude(Joueur__in=[admUser]).filter(Village=villageJoueur)
-    pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=villageJoueur)
+    if username == "admmmenault":
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0])
+    else:
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0]).filter(Cache=False)    
     return {
             "username":username,
             "personnagesJoueur":persosJoueur,
@@ -39,10 +42,16 @@ class Hub(TemplateView):
 
 def createContextVillage(village_id,username,version):
     village = ModelVillage.objects.filter(id=village_id)[0]
-    habitants = Personnage.objects.filter(Village=village_id)
+    if username == "admmmenault":
+        habitants = Personnage.objects.filter(Village=village_id)
+    else:
+        habitants = Personnage.objects.filter(Village=village_id).filter(Cache=False)
     admUser = User.objects.filter(username="admmmenault")[0]
     personnagesJoueur = Personnage.objects.all().exclude(Joueur__in=[admUser]).filter(Village=village)
-    pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=village)
+    if username == "admmmenault":
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0])
+    else:
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0]).filter(Cache=False)
     inventaireVillage = Equipement.objects.filter(Village=village_id)
     quetesVillage = Quete.objects.filter(Village=village_id)
     quetesPouvoir = Quete.objects.filter(Type=3).filter(Version=version)
@@ -69,16 +78,22 @@ class Fiches(TemplateView):
 
     def get(self, request, **kwargs):
         village = ModelVillage.objects.filter(Version=kwargs["version"])[0]
-        persosJoueur = Personnage.objects.filter(Village=village)
+        if request.user.username == "admmmenault":
+            persosJoueur = Personnage.objects.filter(Village=ModelVillage.objects.filter(Version=kwargs["version"])[0])
+        else:
+            persosJoueur = Personnage.objects.filter(Village=ModelVillage.objects.filter(Version=kwargs["version"])[0]).filter(Cache=False)
         admUser = User.objects.filter(username="admmmenault")[0]
         personnagesJoueur = Personnage.objects.all().exclude(Joueur__in=[admUser]).filter(Village=village)
-        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=village)
+        if request.user.username == "admmmenault":
+            pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=kwargs["version"])[0])
+        else:
+            pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=kwargs["version"])[0]).filter(Cache=False)
         return render(request, self.template_name, 
             {
                 "username":request.user.username,
                 "village":village,
                 "personnages":persosJoueur,
-                "personnagesJoueur":personnagesJoueur,
+                "personnagesJoueurs":personnagesJoueur,
                 "PNJ":pnj,
                 "version":kwargs["version"]
                 })
@@ -88,7 +103,10 @@ def createContext(perso_id,username,version):
     persoFiche = Personnage.objects.filter(id=perso_id)[0]
     admUser = User.objects.filter(username="admmmenault")[0]
     personnagesJoueur = Personnage.objects.all().exclude(Joueur__in=[admUser]).filter(Village=ModelVillage.objects.filter(Version=version)[0])
-    pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0])
+    if username == "admmmenault":
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0])
+    else:
+        pnj = Personnage.objects.filter(Joueur=admUser).filter(Village=ModelVillage.objects.filter(Version=version)[0]).filter(Cache=False)
     caracs = Caracteristique.objects.filter(Proprietaire=perso_id)
     pouvoirs = Pouvoir.objects.filter(Proprietaire=perso_id)
     inventaire = Equipement.objects.filter(Proprietaire=perso_id).filter(Statistique__icontains="N/A")
@@ -96,6 +114,8 @@ def createContext(perso_id,username,version):
     armures = Equipement.objects.filter(Proprietaire=perso_id).filter(Statistique__icontains="p")
     competences = Competence.objects.filter(Categorie__in=caracs)
     quetes = Quete.objects.filter(Proprietaire=perso_id)
+    villageJoueur = ModelVillage.objects.filter(Version=version)[0]
+
     return  {
             "username":username,
             "personnage":persoFiche,
@@ -109,6 +129,7 @@ def createContext(perso_id,username,version):
             "armures":armures,
             "quetes":quetes,
             "resultat":-1,
+            "village":villageJoueur,
             "version":version
             }
 
@@ -143,6 +164,7 @@ class lancerDes(TemplateView):
 
     def get(self, request, **kwargs):
         context = createContext(kwargs["perso_id"],request.user.username,kwargs["version"])
+        context["Onglet"] = "Competences"
         context["resultat"] = randint(1,kwargs["taille_des"])+kwargs["carac_points"]
         context["resultat_brut"] = context["resultat"] - kwargs["carac_points"]
         context["bonus"] = kwargs["carac_points"]
@@ -204,6 +226,7 @@ class Attaquer(TemplateView):
     def post(self, request, **kwargs):
 
         context = createContext(kwargs["perso_id"],request.user.username,kwargs["version"])
+        context["Onglet"] = "Personnage"
         context["resultat"] = 0
         context["resultat_brut"] = ""
         context["bonus"] = 0
@@ -260,7 +283,7 @@ class Attaquer(TemplateView):
 class createCompetence(TemplateView):
 
     template_name = 'fichePerso.html'
-    
+
     def post(self, request, **kwargs):
         comp = Competence()
         proprio = Personnage.objects.filter(id=kwargs["perso_id"])[0]
@@ -268,7 +291,9 @@ class createCompetence(TemplateView):
         comp.Bonus = request.POST["Bonus_NEW"]
         comp.Categorie = Caracteristique.objects.filter(Nom=request.POST["Categorie_NEW"]).filter(Proprietaire=proprio)[0]
         comp.save()
-        return render(request, self.template_name,createContext(kwargs["perso_id"],request.user.username,kwargs["version"]))
+        context = createContext(kwargs["perso_id"],request.user.username,kwargs["version"])
+        context["Onglet"] = "Competences"
+        return render(request, self.template_name,context)
 
 
 class createEquipement(TemplateView):
@@ -430,6 +455,7 @@ class creerPersoSave(TemplateView):
         nouveauPerso.Specialite = request.POST["Specialite"]
         nouveauPerso.Aime = request.POST["Aime"]
         nouveauPerso.Deteste = request.POST["Deteste"]
+        nouveauPerso.Cache = request.POST["Cache"]
         nouveauPerso.save()
 
         # Force
@@ -499,7 +525,7 @@ class creerPersoSave(TemplateView):
         pv = Caracteristique()
         pv.Proprietaire = nouveauPerso
         pv.Nom = "PV"
-        pv.Points = 2*constitution.Points+force.Points
+        pv.Points = 2*int(constitution.Points)+int(force.Points)
         pv.PointsMax = pv.Points
         pv.Couleur = Couleur.objects.filter(Nom="Success-dark")[0]
         pv.save()
